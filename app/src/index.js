@@ -1,13 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import "./index.css";
+import Registration from "./components/Registration";
 
-class App extends React.Component{
-    render(){
-        return(
-            <div>hello world</div>
-        )
-    }
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/register" component={Registration} />
+        </Switch>
+      </div>
+    </Router>
+  );
 }
 
-ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(<App />, document.getElementById("app"));
