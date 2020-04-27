@@ -53,4 +53,56 @@ const registration = async (req, res) => {
   }
 };
 
-module.exports = { registration };
+const loginVerification = async (req, res) => {
+  const data = query(`SELECT * FROM users WHERE email = '${req.body.email}';`);
+  const result = await data;
+
+  if (Object.keys(result).length === 1) {
+    bcrypt.compare(req.body.password, result[0].password).then((match) => {
+      if (match) {
+        const payload = {
+          id: result[0].id,
+          name: result[0].name,
+          email: result[0].email,
+          role: result[0].role,
+        };
+
+        const token = jwt.sign(payload, JWTSECRET, { expiresIn: 360 });
+        res.status(200).send({
+          title: "user login",
+          message: "user login successful",
+          statusCode: 200,
+          success: true,
+          load: {
+            name: result[0].name,
+            email: result[0].email,
+            role: result[0].role,
+            token: token,
+          },
+        });
+      } else {
+        res.status(400).send({
+          title: "user login",
+          message: "user login unsuccessful",
+          statusCode: 400,
+          success: false,
+          load: {
+            error: "incorrect password",
+          },
+        });
+      }
+    });
+  } else {
+    res.status(400).send({
+      title: "user login",
+      message: "user login unsuccessful",
+      statusCode: 400,
+      success: false,
+      load: {
+        error: "email not found",
+      },
+    });
+  }
+};
+
+module.exports = { registration, loginVerification };
