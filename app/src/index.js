@@ -10,6 +10,7 @@ import "./index.css";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import Admin from "./components/Admin";
 
 function App() {
   const AuthenticatedRoute = ({ component: Component, ...rest }) => (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/register" component={Registration} />
         <Route path="/login" component={Login} />
         <AuthenticatedRoute exact path="/" component={Home} />
+        <AuthenticatedRoute path="/admin" component={Admin} />
       </div>
     </Router>
   );
