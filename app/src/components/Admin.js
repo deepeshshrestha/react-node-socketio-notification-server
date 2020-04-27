@@ -15,11 +15,27 @@ class App extends Component {
     if (decode(localStorage.getItem("notificationserver")).role !== "admin") {
       this.props.history.push("/");
     }
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClickForAll = this.handleClickForAll.bind(this);
   }
 
-  handleClick(user) {}
+  handleClick(user) {
+    this.props.socket.emit(
+      "sendNotification",
+      user.email,
+      "title",
+      "message for" + user.email
+    );
+  }
 
-  handleClickForAll() {}
+  handleClickForAll() {
+    this.props.socket.emit(
+      "sendNotificationToAll",
+      "title",
+      "message for everyone"
+    );
+  }
 
   componentDidMount() {
     axios({

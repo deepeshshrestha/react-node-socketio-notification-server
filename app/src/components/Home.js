@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { decode } from "../utils/auth";
 import SocketContext from "../utils/socketio-context";
+import * as uuid from "uuid/v4";
 
 class App extends Component {
   constructor(props) {
@@ -12,9 +13,20 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.socket.emit(
+      "registerUserToNotificationService",
+      this.state.user.email,
+      uuid()
+    );
+
+    this.props.socket.on("notifications", (title, body) => {
+      this.notifyUser({ title, body });
+    });
+  }
 
   notifyUser(data) {
+    console.log({ data });
     if (!("Notification" in window)) {
       alert("This browser does not support system notifications");
     } else if (Notification.permission === "granted") {
