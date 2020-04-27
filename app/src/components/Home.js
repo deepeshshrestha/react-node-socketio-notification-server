@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { decode } from "../utils/auth";
+import SocketContext from "../utils/socketio-context";
 
 class App extends Component {
   constructor(props) {
@@ -51,4 +52,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const Home = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <App {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
+
+export default Home;

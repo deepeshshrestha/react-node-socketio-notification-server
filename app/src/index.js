@@ -1,4 +1,5 @@
 import React from "react";
+
 import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
@@ -6,11 +7,18 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import "./index.css";
+
 import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Admin from "./components/Admin";
+
+import SocketContext from "./utils/socketio-context";
+
+import io from "socket.io-client";
+const socket = io("http://localhost:3000");
+
+import "./index.css";
 
 function App() {
   const AuthenticatedRoute = ({ component: Component, ...rest }) => (
@@ -36,8 +44,10 @@ function App() {
       <div>
         <Route path="/register" component={Registration} />
         <Route path="/login" component={Login} />
-        <AuthenticatedRoute exact path="/" component={Home} />
-        <AuthenticatedRoute path="/admin" component={Admin} />
+        <SocketContext.Provider value={socket}>
+          <AuthenticatedRoute exact path="/" component={Home} />
+          <AuthenticatedRoute path="/admin" component={Admin} />
+        </SocketContext.Provider>
       </div>
     </Router>
   );
